@@ -25,7 +25,7 @@
             >
               Hisobingizga kirish
             </h1>
-            <form class="space-y-4 md:space-y-6" action="#">
+            <div class="space-y-4 md:space-y-6" action="#">
               <div>
                 <label
                   for="email"
@@ -33,6 +33,7 @@
                   >Emailingiz</label
                 >
                 <input
+                  v-model="email"
                   type="email"
                   name="email"
                   id="email"
@@ -48,10 +49,11 @@
                   >Parol</label
                 >
                 <input
+                  v-model="password"
                   type="password"
                   name="password"
                   id="password"
-                  placeholder="••••••••"
+                  placeholder="password"
                   class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required=""
                 />
@@ -82,8 +84,10 @@
                 >
               </div>
               <button
+                :disabled="loadinLogin"
+                @click="login"
                 type="submit"
-                class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                class="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
                 Ro'yxatdan o'tish
               </button>
@@ -95,23 +99,42 @@
                   >Ro'yxatdan o'tish</a
                 >
               </p>
-            </form>
+            </div>
           </div>
         </div>
       </div>
     </section>
   </div>
 </template>
-<script>
-export default {
-  // methods: {
-  //   handleLogin() {
-  //     if (this.email && this.password) {
-  //       this.$router.push('/home'); // Home sahifasiga yo‘naltirish
-  //     } else {
-  //       alert('Iltimos, barcha maydonlarni to‘ldiring.');
-  //     }
-  //   },
-  // }
+<script setup>
+import { ref } from "vue";
+import { useAuthStore } from "../../stores/useAuthStore";
+import { useRouter } from "vue-router";
+const authStore = useAuthStore();
+const router = useRouter();
+const email = ref("");
+const password = ref("");
+
+const loadinLogin = ref(false);
+
+const login = async () => {
+  loadinLogin.value = true;
+
+  try {
+    const res = await authStore.login(email.value, password.value);
+    if (res.status == 200) {
+      router.push("/");
+      setTimeout(() => {
+        loadinLogin.value = false;
+        window.location.reload();
+      }, 1000);
+    }
+    if (res.status == 401 || res.status == 404) {
+      loadinLogin.value = false;
+      alert("Admin Topilmadi");
+    }
+  } catch (error) {
+    loadinLogin.value = false;
+  }
 };
 </script>

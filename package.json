@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@primevue/themes": "^4.2.5",
+    "axios": "^1.7.9",
     "flowbite": "^2.5.2",
+    "js-cookie": "^3.0.5",
     "pinia": "^2.2.6",
     "primevue": "^4.2.5",
     "tailwindcss-primeui": "^0.3.4",
