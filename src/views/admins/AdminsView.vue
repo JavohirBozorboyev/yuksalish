@@ -1,41 +1,31 @@
 <template>
-  <div class="">
-    <div><h1 class="text-[#000] font-semibold">Ombor</h1></div>
-    <div class="relative overflow-x-auto rounded-md mt-5">
+  <main>
+    <div class="relative overflow-x-auto">
       <table
-        class="w-full min-w-[800px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
       >
         <thead
           class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
         >
           <tr>
-            <th scope="col" class="px-2 pl-3 py-3">№</th>
-            <th scope="col" class="py-3">Mahsulot nomi</th>
-            <th scope="col" class="py-3">Miqdori (kg)</th>
-            <th scope="col" class="py-3">Sotib olish narxi</th>
-            <th scope="col" class="py-3">Sotish narxi</th>
-            <th scope="col" class="py-3 pr-5 flex justify-end">Taxrirlash</th>
+            <th scope="col" class="px-6 py-3">Admin Full Name</th>
+            <th scope="col" class="px-6 py-3">Email</th>
+            <th scope="col" class="px-6 py-3 flex justify-end">Taxrirlash</th>
           </tr>
         </thead>
         <tbody>
           <tr
-            v-for="(item, i) in data"
+            v-for="item in data"
             :key="item"
-            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
           >
-            <td class="px-2 pl-3 py-4">{{ i + 1 }}</td>
-            <td scope="row" class="py-4 text-sm font-medium">
-              {{ item.name }}
-            </td>
-            <td scope="row" class="py-4 text-sm font-medium">
-              {{ item.size }}
-            </td>
-            <td scope="row" class="py-4 text-sm font-medium">
-              {{ formatCurrency(item.buyyingPrice, item.currency) }}
-            </td>
-            <td scope="row" class="py-4 text-sm font-medium">
-              {{ formatCurrency(item.price) }}
-            </td>
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            >
+              {{ item?.name }} {{ item?.lastname }}
+            </th>
+            <td class="px-6 py-4">{{ item?.email }}</td>
             <td class="px-6 py-4 flex justify-end gap-2">
               <!-- EDIT -->
               <button
@@ -44,8 +34,8 @@
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
+                  width="20"
+                  height="20"
                   viewBox="0 0 24 24"
                   class="fill-white"
                 >
@@ -57,14 +47,14 @@
               <!-- DELETE -->
 
               <button
-                @click="deleteProduct(item._id)"
+                @click="deleteItem(item.id)"
                 type="button"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
+                  width="20"
+                  height="20"
                   viewBox="0 0 24 24"
                   class="fill-white"
                 >
@@ -78,40 +68,23 @@
         </tbody>
       </table>
     </div>
-  </div>
+  </main>
 </template>
 <script setup>
 import axios from "axios";
 import { onMounted, ref } from "vue";
-import formatCurrency from "../../utils/PriceFormatter";
 
 const data = ref();
-const getProduct = async () => {
+const getAdmin = async () => {
   try {
-    const res = await axios.get("/api/product");
+    const res = await axios.get("/api/admin");
     data.value = res.data;
   } catch (error) {
     console.log(error);
   }
 };
 
-const deleteProduct = async (id) => {
-  try {
-    const isConfirmed = confirm("Maxsulotni o'chirmoqchimisiz");
-    if (isConfirmed) {
-      const res = await axios.delete(`/api/product/${id}`);
-      if (res.status == 200) {
-        getProduct();
-      }
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 onMounted(() => {
-  console.log(data);
-
-  getProduct();
+  getAdmin();
 });
 </script>

@@ -13,6 +13,8 @@ import MahsulotOmboriView from "../views/Ombor/MahsulotOmboriView.vue";
 import OmborAddView from "../views/Ombor/OmborAddView.vue";
 import HisobotlarView from "../views/Hisobotlar/HisobotlarView.vue";
 import HisobotAddView from "../views/Hisobotlar/HisobotAddView.vue";
+import AdminsView from "../views/admins/AdminsView.vue";
+import AddAdminsView from "../views/admins/AddAdminsView.vue";
 
 const routes = [
   {
@@ -102,6 +104,22 @@ const routes = [
     component: LoginView,
     meta: {
       layout: LoginLayout,
+    },
+  },
+  {
+    path: "/admins",
+    name: "Admins",
+    component: AdminsView,
+    meta: {
+      layout: AppLayout,
+    },
+  },
+  {
+    path: "/admins/add",
+    name: "Admins Add",
+    component: AddAdminsView,
+    meta: {
+      layout: AppLayout,
     },
   },
 ];

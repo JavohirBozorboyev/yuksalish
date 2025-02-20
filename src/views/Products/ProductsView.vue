@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <div
-      class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4  p-2 items-start bg-white rounded-lg min-h-screen"
+      class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 p-2 items-start bg-white rounded-lg min-h-screen"
     >
       <!-- C1 -->
       <div class="p-6 bg-white w-[250px] border shadow-md rounded-md">
@@ -73,7 +73,6 @@
           <RouterLink to="/tarkibi">Tarkibi</RouterLink>
         </p>
       </div>
-      
     </div>
   </div>
 </template>

@@ -8,7 +8,7 @@ import { RouterView } from "vue-router";
   <div class="bg-slate-200 min-h-screen">
     <AppNavbar />
 
-    <div class="container mx-auto p-2">
+    <div class="mx-auto p-2">
       <RouterView />
     </div>
     <BottomNavigation />
