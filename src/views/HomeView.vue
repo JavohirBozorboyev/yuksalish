@@ -1,8 +1,18 @@
-<script setup></script>
-
 <template>
   <div>
     <div class="relative overflow-x-auto rounded-md">
+      <div
+        class="flex justify-between items-center bg-white p-2 rounded-md mb-5"
+      >
+        <h1 class="text-[#000] font-semibold">Hisob-kitob</h1>
+        <RouterLink to="/home/add">
+          <button
+            class="bg-blue-500 text-white p-2 px-4 rounded-md active:scale-95 duration-300"
+          >
+            Xardidor Qo'shish
+          </button>
+        </RouterLink>
+      </div>
       <table
         class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
       >
@@ -78,9 +88,11 @@
             />
           </svg>
           <span class="sr-only">Close modal</span>
+          <!-- DELETE -->
         </button>
         <div class="px-4 pt-12 pb-6 text-center">
           <button
+            @click="deleteCustomer(item._id)"
             data-modal-hide="popup-modal"
             type="button"
             class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
@@ -92,13 +104,43 @@
             type="button"
             class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
           >
-           <RouterLink to="/home/edit/22">
-            Tahrirlash
-           </RouterLink> 
-            
+            <RouterLink to="/home/edit/22"> Tahrirlash </RouterLink>
           </button>
         </div>
       </div>
     </div>
   </div>
 </template>
+<script setup>
+import axios from "axios";
+import { onMounted, ref } from "vue";
+
+const customers = ref([]);
+
+const getCustomers = async () => {
+  try {
+    const res = await axios.get("/api/admin"); // Xaridorlar API-ni chaqirish
+    customers.value = res.data;
+  } catch (error) {
+    console.log("Xatolik:", error);
+  }
+};
+
+const deleteCustomer = async (id) => {
+  try {
+    const isConfirmed = confirm("Xaridorni o'chirmoqchimisiz?");
+    if (isConfirmed) {
+      const res = await axios.delete(`/api/admin/${id}`);
+      if (res.status == 200) {
+        getCustomers(); // Ro‘yxatni yangilash
+      }
+    }
+  } catch (error) {
+    console.log("Xatolik:", error);
+  }
+};
+
+onMounted(() => {
+  getCustomers();
+});
+</script>

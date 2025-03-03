@@ -1,8 +1,16 @@
 <template>
   <div class="">
-    <div
-      class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 p-2 items-start bg-white rounded-lg min-h-screen"
-    >
+    <div class="flex justify-between items-center bg-white p-2 rounded-md mb-5">
+      <h1 class="text-[#000] font-semibold">Mahsulotlar</h1>
+      <RouterLink to="/product/add">
+        <button
+          class="bg-blue-500 text-white p-2 px-4 rounded-md active:scale-95 duration-300"
+        >
+          Mahsulotlar Qo'shish
+        </button>
+      </RouterLink>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4">
       <!-- C1 -->
       <div class="p-6 bg-white w-[250px] border shadow-md rounded-md">
         <form class="">

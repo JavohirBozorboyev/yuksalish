@@ -1,82 +1,122 @@
 <template>
   <div class="">
-    <div><h1 class="text-[#000] font-semibold">Ombor</h1></div>
-    <div class="relative overflow-x-auto rounded-md mt-5">
-      <table
-        class="w-full min-w-[800px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
-      >
-        <thead
-          class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+    <div class="flex justify-between items-center bg-white p-2 rounded-md">
+      <h1 class="text-[#000] font-semibold">Ombor</h1>
+      <RouterLink to="/ombor/add">
+        <button
+          class="bg-blue-500 text-white p-2 px-4 rounded-md active:scale-95 duration-300"
         >
-          <tr>
-            <th scope="col" class="px-2 pl-3 py-3">№</th>
-            <th scope="col" class="py-3">Mahsulot nomi</th>
-            <th scope="col" class="py-3">Miqdori (kg)</th>
-            <th scope="col" class="py-3">Sotib olish narxi</th>
-            <th scope="col" class="py-3">Sotish narxi</th>
-            <th scope="col" class="py-3 pr-5 flex justify-end">Taxrirlash</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(item, i) in data"
-            :key="item"
-            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+          Maxsulot Qo'shish
+        </button>
+      </RouterLink>
+    </div>
+    
+    <div
+      v-if="!data"
+      class="w-full h-full bg-white min-h-[60vh] rounded-md flex items-center justify-center mt-5"
+    >
+      <h1 class="text-xl">Loading...</h1>
+    </div>
+    <div
+      class="relative rounded-sm mt-5 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2"
+    >
+      <div
+        v-for="(item, index) in data"
+        class="w-full bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 p-2 md:p-4"
+      >
+        <div class="flex justify-between items-center">
+          <h1 class="text-base font-bold">{{ item?.name }}</h1>
+          <button
+            class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5"
+            type="button"
           >
-            <td class="px-2 pl-3 py-4">{{ i + 1 }}</td>
-            <td scope="row" class="py-4 text-sm font-medium">
-              {{ item.name }}
-            </td>
-            <td scope="row" class="py-4 text-sm font-medium">
-              {{ item.size }}
-            </td>
-            <td scope="row" class="py-4 text-sm font-medium">
-              {{ formatCurrency(item.buyyingPrice, item.currency) }}
-            </td>
-            <td scope="row" class="py-4 text-sm font-medium">
-              {{ formatCurrency(item.price) }}
-            </td>
-            <td class="px-6 py-4 flex justify-end gap-2">
-              <!-- EDIT -->
-              <button
-                type="button"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  class="fill-white"
+            <span class="sr-only">Open dropdown</span>
+            <svg
+              class="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 16 3"
+            >
+              <path
+                d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"
+              />
+            </svg>
+          </button>
+          <!-- Dropdown menu -->
+          <div
+            class="z-10 hidden text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700"
+          >
+            <ul class="py-2">
+              <li>
+                <a
+                  href="#"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  >Edit</a
                 >
-                  <path
-                    d="M8.707 19.707 18 10.414 13.586 6l-9.293 9.293a1.003 1.003 0 0 0-.263.464L3 21l5.242-1.03c.176-.044.337-.135.465-.263zM21 7.414a2 2 0 0 0 0-2.828L19.414 3a2 2 0 0 0-2.828 0L15 4.586 19.414 9 21 7.414z"
-                  ></path>
-                </svg>
-              </button>
-              <!-- DELETE -->
-
-              <button
-                @click="deleteProduct(item._id)"
-                type="button"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  class="fill-white"
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  >Export Data</a
                 >
-                  <path
-                    d="M6 7H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7H6zm4 12H8v-9h2v9zm6 0h-2v-9h2v9zm.618-15L15 2H9L7.382 4H3v2h18V4z"
-                  ></path>
-                </svg>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  >Delete</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <hr class="my-4" />
+        <div>
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <p class="text-[10px] uppercase text-gray-400">Miqdor</p>
+              <p class="font-medium">{{ item?.size }} kg</p>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase text-gray-400">Jami Summa</p>
+              <p class="font-medium text-base">
+                {{ formatCurrency(Number(item?.size) * Number(item?.price)) }}
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between gap-2 mt-4">
+            <div>
+              <p class="text-[10px] uppercase text-gray-400">1-kg Narxi</p>
+              <p class="font-medium">
+                {{ formatCurrency(item?.buyyingPrice) }}
+              </p>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase text-gray-400">
+                1-kg Sotilish Narxi
+              </p>
+              <p class="font-medium">
+                {{ formatCurrency(item?.price) }}
+              </p>
+            </div>
+          </div>
+          <hr class="my-4" />
+          <div class="grid grid-cols-2 gap-2">
+            <button
+              class="bg-blue-500 text-white px-3 p-1 rounded-md active:scale-95 duration-200 text-sm"
+            >
+              Sotish
+            </button>
+            <button
+              class="border-2 text-sm border-blue-500 text-blue-500 px-3 p-1 rounded-md active:scale-95 duration-200"
+            >
+              Qo'shish
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

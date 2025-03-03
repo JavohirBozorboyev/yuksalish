@@ -1,6 +1,18 @@
 <template>
-  <div class="w-full h-screen p-4">
-    <div class="relative overflow-x-auto rounded-md">
+  <div class="w-full h-screen">
+    <div class="">
+      <div
+        class="flex justify-between items-center bg-white p-2 rounded-md mb-5"
+      >
+        <h1 class="text-[#000] font-semibold">Hisobotlar</h1>
+        <RouterLink to="/hisobotlar/add">
+          <button
+            class="bg-blue-500 text-white p-2 px-4 rounded-md active:scale-95 duration-300"
+          >
+            Hisobotlar Qo'shish
+          </button>
+        </RouterLink>
+      </div>
       <table
         class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
       >
@@ -295,7 +307,7 @@
                 data-modal-toggle="popup-modal"
                 class="p-2 rounded-md bg-slate-100 flex items-center justify-center active:scale-90 duration-200"
               >
-                <RouterLink to="/hisobotadd">
+                <RouterLink to="/hisobotlar/add">
                   <svg
                     clip-rule="evenodd"
                     fill-rule="evenodd"
