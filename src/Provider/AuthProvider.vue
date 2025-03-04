@@ -1,23 +1,16 @@
 <script setup>
-import { provide, onMounted } from "vue";
+import { provide, onMounted, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { useAuthStore } from "../stores/useAuthStore";
 
 const authStore = useAuthStore();
 const router = useRouter();
 
-if (Cookies.get("authToken")) {
-  axios.defaults.headers.common["Authorization"] = `Bearer ${Cookies.get(
-    "authToken"
-  )}`;
-}
-
-onMounted(() => {
+watchEffect(() => {
   authStore.initialize();
 
-  if (!authStore.user) {
+  if (!authStore.user || !authStore.token) {
     router.replace("/login");
   }
 });

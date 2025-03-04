@@ -124,25 +124,4 @@ const logout = () => {
   sessionStorage.clear();
   location.reload();
 };
-
-function addBtn() {
-  if (route.path == "/") {
-    router.push("/home");
-  }
-  if (route.path == "/") {
-    router.push("/home/add");
-  }
-  if (route.path == "/product") {
-    router.push("/product");
-  }
-  if (route.path == "/product") {
-    router.push("/product/add");
-  }
-  if (route.path == "/ombor") {
-    router.push("/ombor");
-  }
-  if (route.path == "/ombor") {
-    router.push("/ombor/add");
-  }
-}
 </script>
