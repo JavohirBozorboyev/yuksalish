@@ -97,7 +97,6 @@ const PostProduct = async () => {
 
     const res = await axios.post("/api/product", product.value);
 
-
     if (res.status === 201) {
       product.value = {
         name: "",
