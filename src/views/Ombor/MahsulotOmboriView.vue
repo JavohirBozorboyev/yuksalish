@@ -120,8 +120,7 @@
       </div>
     </div>
   </div>
-  <!-- Begin Edit Product modal -->
-  <!-- Main modal -->
+  <!-- Begin Sell Product modal -->
   <div
     tabindex="-1"
     aria-hidden="true"
@@ -133,11 +132,11 @@
     class=""
   >
     <div
-      class="relative flex items-center justify-center p-4 w-full max-w-full max-h-full"
+      class="relative flex items-center bg-white justify-center p-4 w-full max-w-full min-h-screen"
     >
       <!-- Modal content -->
       <div
-        class="relative bg-white w-full md:w-1/2 rounded-lg shadow-sm dark:bg-gray-700 border"
+        class="relative bg-white w-full  rounded-lg shadow-sm dark:bg-gray-700 border"
       >
         <!-- Modal header -->
         <div
@@ -178,21 +177,49 @@
             >
               Mahsulot nomi:
             </h1>
-            {{ sellProduct.name }}</span
+            {{ sellProductName }}</span
           >
           <span class="flex flex-col gap-1 font-bold"
             ><h1
               class="block text-sm font-medium text-gray-900 dark:text-white"
             >
-              Mahsulot hajmi:
+              Jami mahsulot:
             </h1>
             {{ sellProductSize }} Kg</span
           >
         </div>
         <div class="w-full p-4 md:p-5">
           <form class="space-y-4 w-full" action="#">
-            <div class="flex gap-4">
-              <div class="w-1/2">
+            <div class="grid gap-3">
+              <div class="col-span-2 md:col-span-1">
+                <label
+                  for="buyer"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >Xaridor</label
+                >
+                <input
+                  type="text"
+                  name="buyer"
+                  v-model="sellProduct.name"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="Jahongir MCHJ"
+                />
+              </div>
+              <div class="col-span-2 md:col-span-1">
+                <label
+                  for="buyerNumber"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >Xaridor raqami</label
+                >
+                <input
+                  type="tel"
+                  name="buyerNumber"
+                  v-model="sellProduct.phone"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="+998(91)123-45-67"
+                />
+              </div>
+              <div class="col-span-2 md:col-span-1">
                 <label
                   for="numberheigh"
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -212,7 +239,7 @@
                   required
                 />
               </div>
-              <div class="w-1/2">
+              <div class="col-span-2 md:col-span-1">
                 <label
                   for="price"
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -231,6 +258,20 @@
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                   required
                 />
+              </div>
+              <div class="col-span-2">
+                <label
+                  for="message"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >Tafsilot</label
+                >
+                <textarea
+                  id="message"
+                  v-model="sellProduct.description"
+                  rows="4"
+                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Write your thoughts here..."
+                ></textarea>
               </div>
             </div>
             <div
@@ -252,7 +293,11 @@
                 >
                 <h1 class="font-bold">
                   {{
-                    formatCurrency(sellProduct.price ? sellProduct.price * sellProduct.size : 0)
+                    formatCurrency(
+                      sellProduct.price
+                        ? sellProduct.price * sellProduct.size
+                        : 0
+                    )
                   }}
                 </h1></span
               >
@@ -263,16 +308,19 @@
                 >
                 <h1 class="font-bold">
                   {{
-                    formatCurrency(sellProduct.price
-                      ? sellProduct.price * sellProduct.size -
-                        sellProduct.buyyingPrice * sellProduct.size
-                      : 0)
+                    formatCurrency(
+                      sellProduct.price
+                        ? sellProduct.price * sellProduct.size -
+                            sellProduct.buyyingPrice * sellProduct.size
+                        : 0
+                    )
                   }}
                 </h1></span
               >
             </div>
             <button
-              type="submit"
+              type="button"
+              @click="sellProductfunction()"
               class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               Sotish
@@ -282,8 +330,7 @@
       </div>
     </div>
   </div>
-
-  <!-- End Edit Product modal -->
+  <!-- End Sell Product modal -->
 </template>
 <script setup>
 import axios from "axios";
@@ -294,9 +341,15 @@ const sellProduct = reactive({
   name: null,
   size: null,
   price: null,
+  productId: null,
+  phone: null,
   buyyingPrice: null,
+  originalCurrency:'UZS',
+  sellingCurrency:'UZS',
+  description:null,
 });
 const sellProductSize = ref();
+const sellProductName=ref("") 
 const sellModal = ref(false);
 const data = ref();
 const getProduct = async () => {
@@ -311,11 +364,16 @@ const getProduct = async () => {
 const openModalSell = async (item) => {
   sellModal.value = true;
   sellProduct.price = item.price;
+  sellProduct.productId = item._id;
   sellProduct.buyyingPrice = item.buyyingPrice;
-  sellProduct.name = item.name;
   sellProductSize.value = item.size;
+  sellProductName.value = item.name;
   console.log(sellProduct.buyyingPrice);
 };
+
+const sellProductfunction= () => {
+  console.log(sellProduct);
+}
 const closeModeal = () => {
   sellModal.value = false;
   sellProduct.name = null;
