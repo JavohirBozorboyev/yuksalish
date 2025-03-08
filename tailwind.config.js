@@ -6,7 +6,11 @@ export default {
     "./node_modules/flowbite/**/*.js",
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        xs: { max: "400px" }, // 400px va undan kichik ekranlar uchun
+      },
+    },
   },
   plugins: [require("flowbite/plugin")],
 };

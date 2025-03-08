@@ -15,6 +15,7 @@ import HisobotlarView from "../views/Hisobotlar/HisobotlarView.vue";
 import HisobotAddView from "../views/Hisobotlar/HisobotAddView.vue";
 import AdminsView from "../views/admins/AdminsView.vue";
 import AddAdminsView from "../views/admins/AddAdminsView.vue";
+import ProductIdView from "../views/Products/ProductIdView.vue";
 
 const routes = [
   {
@@ -61,6 +62,14 @@ const routes = [
     path: "/ombor",
     name: "MahsulotOmboriView",
     component: MahsulotOmboriView,
+    meta: {
+      layout: AppLayout,
+    },
+  },
+  {
+    path: "/ombor/:id",
+    name: "Mahsulot Id sahifa",
+    component: ProductIdView,
     meta: {
       layout: AppLayout,
     },
