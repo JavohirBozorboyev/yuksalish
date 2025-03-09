@@ -2,7 +2,7 @@
   <div
     class="w-full bg-white border relative border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 p-2 md:p-4"
   >
-    <div class="flex justify-between items-center relative ">
+    <div class="flex justify-between items-center relative">
       <h1 class="text-base font-bold">{{ item?.name }}</h1>
       <button
         class="inline-block w-40 peer text-gray-500 bg-gray-200 p-1 rounded-md"
@@ -14,7 +14,8 @@
       <div
         class="absolute hidden peer-hover:grid hover:grid w-40 p-2 bg-white border right-0 top-8 z-10 cursor-pointer rounded-md grid-cols-1 gap-2"
       >
-        <RouterLink :to="'/ombor/'+item._id" 
+        <RouterLink
+          :to="'/ombor/' + item._id"
           class="bg-gray-100 p-1 px-2 w-full rounded active:scale-95 duration-300 text-sm"
           >Ko'rish</RouterLink
         >
@@ -294,8 +295,7 @@ const sellProduct = reactive({
   productId: null,
   phone: null,
   buyyingPrice: null,
-  originalCurrency: "UZS",
-  sellingCurrency: "UZS",
+  currency: "UZS",
   description: null,
 });
 const sellProductSize = ref();
@@ -320,9 +320,12 @@ const sellProductfunction = async () => {
       sellingPrice: sellProduct.price,
       originalPrice: sellProduct.buyyingPrice,
       phone: sellProduct.phone,
-      originalCurrency: sellProduct.originalCurrency,
-      sellingCurrency: sellProduct.sellingCurrency,
+      currency: sellProduct.currency,
       description: sellProduct.description,
+      totalAmount: sellProduct.price * sellProduct.size,
+      profit:
+        sellProduct.price * sellProduct.size -
+        sellProduct.buyyingPrice * sellProduct.size,
     });
     if (res.status == 201) {
       emits("getProduct");
