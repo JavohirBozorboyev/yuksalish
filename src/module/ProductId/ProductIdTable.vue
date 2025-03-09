@@ -64,6 +64,7 @@ import { useRoute } from "vue-router";
 const id = useRoute().params.id;
 
 const productHistory = ref([]);
+
 const getProductHistory = async () => {
   try {
     const response = await axios.get(`/api/product-history/${id}`);
