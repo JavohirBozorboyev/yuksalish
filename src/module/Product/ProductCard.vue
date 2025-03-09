@@ -67,6 +67,7 @@
           Sotish
         </button>
         <button
+        @click="openModalAdd(item)"
           class="border-2 text-sm border-blue-500 text-blue-500 px-3 p-1 rounded-md active:scale-95 duration-200"
         >
           Qo'shish
@@ -94,7 +95,7 @@
           Mahsulot Sotish
         </h3>
         <button
-          @click="closeModeal()"
+          @click="closeModal()"
           type="button"
           class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
           data-modal-hide="authentication-modal"
@@ -271,19 +272,159 @@
             @click="sellProductfunction()"
             class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            Sotish
+            {{ isLoading ? "Loading..." : "Sotish" }}
           </button>
         </form>
       </div>
     </div>
   </div>
   <!-- End Sell Product modal -->
+  <!-- Begin Add Product modal -->
+  <div
+    tabindex="-1"
+    aria-hidden="true"
+    :class="
+      addProduct
+        ? 'flex  overflow-x-hidden fixed top-0 bottom-0 right-0 left-0 z-50 bg-white w-full md:inset-0'
+        : 'hidden '
+    "
+  >
+    <!-- Modal content -->
+    <div class="w-full shadow-sm dark:bg-gray-700 border">
+      <!-- Modal header -->
+      <div
+        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200"
+      >
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+          Mahsulot Sotish
+        </h3>
+        <button
+          @click="closeAddModal()"
+          type="button"
+          class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          data-modal-hide="authentication-modal"
+        >
+          <svg
+            class="w-3 h-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 14"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+            />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <div class="w-full px-4 pt-4 flex justify-between flex-wrap">
+        <span class="flex flex-col xs:text-sm gap-1 font-bold"
+          ><h1 class="block text-sm xs:text-xs font-medium text-gray-900 dark:text-white overflow-hidden whitespace-nowrap text-ellipsis">
+            Mahsulot nomi
+          </h1>
+          {{ addProductInfo.name }}
+        </span>
+        <span class="flex flex-col gap-1 xs:text-sm font-bold"
+          ><h1 class="block text-sm xs:text-xs font-medium text-gray-900 dark:text-white overflow-hidden whitespace-nowrap text-ellipsis">
+            Tannarxi
+          </h1>
+          {{ formatCurrency(addProductInfo.buyyingPrice) }}
+        </span>
+        <span class="flex flex-col xs:text-sm gap-1 font-bold"
+          ><h1 class="block text-sm xs:text-xs font-medium text-gray-900 dark:text-white overflow-hidden whitespace-nowrap text-ellipsis">
+            Jami mahsulot:
+          </h1>
+          {{ addProductInfo.size }} Kg</span
+        >
+      </div>
+      <div class="w-full p-4 md:p-5">
+        <form class="w-full" action="#">
+          <div class="grid gap-3">
+            <div class="col-span-2 md:col-span-1">
+              <label
+                for="numberheigh"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Mahsulot Hajmi(kg)</label
+              >
+              <input
+                type="number"
+                name="numberheigh"
+                v-model="addProductSize"
+                :class="
+                  sellProduct.size > sellProductSize
+                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                    : ''
+                "
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                placeholder="500"
+                required
+              />
+            </div>
+          </div>
+          <div
+            class="grid grid-cols-2 gap-2 md:flex md:justify-between py-4 mt-4 dark:border-gray-600 border-gray-200"
+          >
+            <span
+              ><label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Qo'shiladigan mahsulot</label
+              >
+              <h1 class="font-bold xs:text-sm overflow-hidden whitespace-nowrap text-ellipsis text-gray-500">
+                {{ addProductSize ? addProductSize : 0 }} kg
+              </h1></span
+            >
+            <span
+              ><label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Sarflanadigan summa</label
+              >
+              <h1 class="font-bold xs:text-sm overflow-hidden whitespace-nowrap text-ellipsis text-gray-500">
+                {{
+                  formatCurrency(
+                    addProductInfo?.price ? addProductInfo?.buyyingPrice * addProductSize : 0
+                  )
+                }}
+              </h1></span
+            >
+            <span
+              ><label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Jami mahsulot</label
+              >
+              <h1 class="font-bold xs:text-sm overflow-hidden whitespace-nowrap text-ellipsis text-gray-500">
+                {{
+                    addProductSize
+                      ? addProductInfo?.size + addProductSize
+                      : 0
+                }} kg
+              </h1></span
+            >
+          </div>
+          <button
+            type="button"
+            @click="addProductById(addProductInfo?._id)"
+            class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            {{ isLoading ? "Loading..." : "Qo'shish"}}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- End Add Product modal -->
 </template>
 <script setup>
 import axios from "axios";
 import { defineProps, defineEmits, ref, reactive } from "vue";
 import formatCurrency from "../../utils/PriceFormatter";
 import { RouterLink } from "vue-router";
+import Swal from 'sweetalert2';
 
 const props = defineProps({ item: {} });
 const emits = defineEmits(["getProduct"]);
@@ -301,6 +442,10 @@ const sellProduct = reactive({
 const sellProductSize = ref();
 const sellProductName = ref("");
 const sellModal = ref(false);
+const addProduct= ref(false);
+const addProductInfo = ref({});
+const addProductSize= ref(null)
+const isLoading = ref(false);
 
 const openModalSell = async (item) => {
   sellModal.value = true;
@@ -311,7 +456,14 @@ const openModalSell = async (item) => {
   sellProductName.value = item.name;
 };
 
+const openModalAdd = async (item) => {
+  addProduct.value = true;
+  addProductInfo.value=item
+  console.log(item);
+};
+
 const sellProductfunction = async () => {
+  isLoading.value = true;
   try {
     const res = await axios.post(`/api/product-history`, {
       name: sellProduct.name,
@@ -328,15 +480,50 @@ const sellProductfunction = async () => {
         sellProduct.buyyingPrice * sellProduct.size,
     });
     if (res.status == 201) {
+      Swal.fire({
+        position: 'top-center',
+        icon:'success',
+        title: `Mahsulot Sotildi`,
+        showConfirmButton: false,
+        timer: 1500
+      });
+      isLoading.value = false;
       emits("getProduct");
-      closeModeal();
+      closeModal();
     }
   } catch (error) {
+    isLoading.value = false;
     console.log(error);
   }
 };
 
-const closeModeal = () => {
+const addProductById=async (id) => {
+  isLoading.value = true
+  try{
+    const res = await axios.put(`/api/product/size/${id}`, {
+      size: addProductSize.value,
+    });
+    if (res.status == 200) {
+       Swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: `Mahsulot qo'shildi`,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                addProductSize.value =""
+                isLoading.value = false;
+      emits("getProduct");
+      closeAddModal();
+    }
+  }
+  catch (error) {
+    isLoading.value = false;
+    console.log(error);
+  };
+}
+
+const closeModal = () => {
   sellModal.value = false;
   sellProduct.name = null;
   sellProduct.size = null;
@@ -344,5 +531,8 @@ const closeModeal = () => {
   sellProductSize.value = null;
   sellProduct.phone = null;
   sellProduct.description = null;
+};
+const closeAddModal = () => {
+  addProduct.value = false;
 };
 </script>
