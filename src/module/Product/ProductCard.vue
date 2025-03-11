@@ -16,16 +16,24 @@
       >
         <RouterLink
           :to="'/ombor/' + item._id"
-          class="bg-gray-100 p-1 px-2 w-full rounded active:scale-95 duration-300 text-sm"
-          >Ko'rish</RouterLink
+          class="bg-gray-100 p-1 flex gap-1 px-2 w-full rounded active:scale-95 duration-300 text-sm"
+          >
+          <IconEye size="18" class="text-gray-400"></IconEye>
+          Ko'rish</RouterLink
         >
         <span
-          class="bg-gray-100 p-1 px-2 w-full rounded active:scale-95 duration-300 text-sm"
-          >Taxrirlash</span
+        @click="openModalEdit(item)"
+          class="bg-gray-100 p-1 px-2 flex gap-1 w-full rounded active:scale-95 duration-300 text-sm"
+          >
+          <IconPencil size="18" class="text-gray-400"></IconPencil>
+          Taxrirlash</span
         >
         <span
-          class="bg-red-200 p-1 px-2 w-full rounded active:scale-95 duration-300 text-sm"
-          >O'chirish</span
+        @click="deletProductModal(item)"
+          class="bg-red-200 p-1 flex gap-1 px-2 w-full rounded active:scale-95 duration-300 text-sm"
+          >
+          <IconTrash size="18" class="text-red-500"></IconTrash>
+          O'chirish</span
         >
       </div>
       <!-- End modal dropdown -->
@@ -296,7 +304,7 @@
         class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200"
       >
         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-          Mahsulot Sotish
+          Mahsulot Qo'shish
         </h3>
         <button
           @click="closeAddModal()"
@@ -418,12 +426,191 @@
     </div>
   </div>
   <!-- End Add Product modal -->
+  <!-- Begin Edit Product modal -->
+  <div
+    tabindex="-1"
+    aria-hidden="true"
+    :class="
+      editProductModal
+        ? 'flex  overflow-x-hidden fixed top-0 bottom-0 right-0 left-0 z-50 bg-white w-full md:inset-0'
+        : 'hidden '
+    "
+  >
+    <!-- Modal content -->
+    <div class="w-full shadow-sm dark:bg-gray-700 border">
+      <!-- Modal header -->
+      <div
+        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200"
+      >
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+          Mahsulot Taxrirlash
+        </h3>
+        <button
+          @click="closeEditModal()"
+          type="button"
+          class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          data-modal-hide="authentication-modal"
+        >
+          <svg
+            class="w-3 h-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 14"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+            />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <div class="w-full px-4 pt-4 flex justify-between flex-wrap">
+        <span class="flex flex-col xs:text-sm gap-1 font-bold"
+          ><h1 class="block text-sm xs:text-xs font-medium text-gray-900 dark:text-white overflow-hidden whitespace-nowrap text-ellipsis">
+            Mahsulot nomi
+          </h1>
+          {{ editProduct.name }}
+        </span>
+        <span class="flex flex-col gap-1 xs:text-sm font-bold"
+          ><h1 class="block text-sm xs:text-xs font-medium text-gray-900 dark:text-white overflow-hidden whitespace-nowrap text-ellipsis">
+            Tannarxi
+          </h1>
+          {{ formatCurrency(editProduct.buyyingPrice) }}
+        </span>
+        <span class="flex flex-col xs:text-sm gap-1 font-bold"
+          ><h1 class="block text-sm xs:text-xs font-medium text-gray-900 dark:text-white overflow-hidden whitespace-nowrap text-ellipsis">
+            Jami mahsulot:
+          </h1>
+          {{ editProduct.size }} Kg</span
+        >
+      </div>
+      <div class="w-full p-4 md:p-5">
+        <form class="w-full" action="#">
+          <div class="grid gap-3">
+            <div class="col-span-2 md:col-span-1">
+              <label
+                for="textName"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Mahsulot Nomi</label
+              >
+              <input
+                type="text"
+                name="textName"
+                v-model="editProduct.name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                placeholder="500"
+              />
+            </div>
+            <div class="col-span-2 md:col-span-1">
+              <label
+                for="numberheigh"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Mahsulot Hajmi(kg)</label
+              >
+              <input
+                type="number"
+                name="numberheigh"
+                v-model="editProduct.size"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                placeholder="500"
+                required
+              />
+            </div>
+            <div class="col-span-2 md:col-span-1">
+              <label
+                for="numberheigh"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >1 Kg narxi</label
+              >
+              <input
+                type="number"
+                name="numberheigh"
+                v-model="editProduct.buyyingPrice"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                placeholder="500"
+                required
+              />
+            </div>
+            <div class="col-span-2 md:col-span-1">
+              <label
+                for="numberheigh"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >1 Kg Sotilish narxi</label
+              >
+              <input
+                type="number"
+                name="numberheigh"
+                v-model="editProduct.price"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                placeholder="500"
+                required
+              />
+            </div>
+          </div>
+          <!-- <div
+            class="grid grid-cols-2 gap-2 md:flex md:justify-between py-4 mt-4 dark:border-gray-600 border-gray-200"
+          >
+            <span
+              ><label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Qo'shiladigan mahsulot</label
+              >
+              <h1 class="font-bold xs:text-sm overflow-hidden whitespace-nowrap text-ellipsis text-gray-500">
+                {{ addProductSize ? addProductSize : 0 }} kg
+              </h1></span
+            >
+            <span
+              ><label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Sarflanadigan summa</label
+              >
+              <h1 class="font-bold xs:text-sm overflow-hidden whitespace-nowrap text-ellipsis text-gray-500">
+                {{
+                  formatCurrency(
+                    addProductInfo?.price ? addProductInfo?.buyyingPrice * addProductSize : 0
+                  )
+                }}
+              </h1></span
+            >
+            <span
+              ><label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Jami mahsulot</label
+              >
+              <h1 class="font-bold xs:text-sm overflow-hidden whitespace-nowrap text-ellipsis text-gray-500">
+                {{
+                    addProductSize
+                      ? addProductInfo?.size + addProductSize
+                      : 0
+                }} kg
+              </h1></span
+            >
+          </div> -->
+          <button
+            type="button"
+            @click="editProductById()"
+            class="w-full text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            {{ isLoading ? "Loading..." : "O'zgartirish"}}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- End Edit Product modal -->
 </template>
 <script setup>
 import axios from "axios";
 import { defineProps, defineEmits, ref, reactive } from "vue";
 import formatCurrency from "../../utils/PriceFormatter";
 import { RouterLink } from "vue-router";
+import { IconTrash, IconPencil,IconEye } from "@tabler/icons-vue";
 import Swal from 'sweetalert2';
 
 const props = defineProps({ item: {} });
@@ -445,9 +632,21 @@ const sellModal = ref(false);
 const addProduct= ref(false);
 const addProductInfo = ref({});
 const addProductSize= ref(null)
+const editProductModal = ref(false);
+const editProduct=reactive({
+  id: null,
+  name: null,
+  size: null,
+  price: null,
+  productId: null,
+  phone: null,
+  buyyingPrice: null,
+  currency: "UZS",
+  description: null,
+})
 const isLoading = ref(false);
 
-const openModalSell = async (item) => {
+const openModalSell =  (item) => {
   sellModal.value = true;
   sellProduct.price = item.price;
   sellProduct.productId = item._id;
@@ -456,11 +655,21 @@ const openModalSell = async (item) => {
   sellProductName.value = item.name;
 };
 
-const openModalAdd = async (item) => {
+const openModalAdd =  (item) => {
   addProduct.value = true;
   addProductInfo.value=item
   console.log(item);
 };
+
+const openModalEdit = (item) => {
+  editProductModal.value = true;
+  editProduct.name = item.name;
+  editProduct.size = item.size;
+  editProduct.price = item.price;
+  editProduct.id = item._id;
+  editProduct.buyyingPrice = item.buyyingPrice;
+  console.log(editProduct);
+}
 
 const sellProductfunction = async () => {
   isLoading.value = true;
@@ -523,6 +732,35 @@ const addProductById=async (id) => {
   };
 }
 
+const editProductById= async ()=>{
+  isLoading.value = true
+  try{
+    const res = await axios.put(`/api/product/${editProduct.id}`, {
+      _id:editProduct.id,
+      name: editProduct.name,
+      size: editProduct.size,
+      price: editProduct.price,
+      buyyingPrice: editProduct.buyyingPrice,
+    });
+    if (res.status == 200) {
+       Swal.fire({
+                    position: 'top-center',
+                    icon:'success',
+                    title: `Mahsulot o'zgartirildi`,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                isLoading.value = false;
+      emits("getProduct");
+      closeEditModal();
+    }
+  }
+  catch (error) {
+    isLoading.value = false;
+    console.log(error);
+  };
+}
+
 const closeModal = () => {
   sellModal.value = false;
   sellProduct.name = null;
@@ -535,4 +773,49 @@ const closeModal = () => {
 const closeAddModal = () => {
   addProduct.value = false;
 };
+
+const closeEditModal=() => {
+  editProductModal.value = false;
+  editProduct.name = null;
+  editProduct.size = null;
+  editProduct.price = null;
+  editProduct.id = null;
+  editProduct.buyyingPrice = null;
+}
+
+const deletProductModal=(item) => {
+  Swal.fire({
+  title: item.name + " " + "o'chirilsinmi?",
+  text: "O'chirilgan ma'lumotlar qayta tiklanmaydi!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  cancelButtonText:"Bekor qilish",
+  confirmButtonText: "Ha o'chirilsin!"
+}).then((res)=>{
+  if (res.isConfirmed) {
+    deletProductById(item);
+  }
+})
+}
+
+const deletProductById=async (item) => {
+  try {
+    const res = await axios.delete(`/api/product/${item._id}`);
+    if (res.status == 200) {
+      Swal.fire({
+        position: 'top-center',
+        icon:'success',
+        title: `Mahsulot o'chirildi`,
+        showConfirmButton: false,
+        timer: 1500
+      });
+      emits("getProduct");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+}
 </script>
